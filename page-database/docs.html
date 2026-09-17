@@ -53,11 +53,7 @@
             --accent-soft: rgba(129, 140, 248, 0.15);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg);
@@ -71,10 +67,8 @@
 
         .bg-grid {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background-image:
                 linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
@@ -85,13 +79,10 @@
 
         .biground-bg {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 900px;
-            height: 900px;
-            max-width: 95vw;
-            max-height: 95vh;
+            width: 900px; height: 900px;
+            max-width: 95vw; max-height: 95vh;
             background-image: url('https://i.pinimg.com/originals/41/ce/7b/41ce7b66da0ad1997d09985e67c2a348.jpg');
             background-size: contain;
             background-position: center;
@@ -125,19 +116,6 @@
             background: rgba(17, 24, 39, 0.75);
         }
 
-        .loader {
-            width: 28px;
-            height: 28px;
-            border: 2px solid #e2e8f0;
-            border-top: 2px solid #4a5568;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
         .gradient-text {
             background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
             -webkit-background-clip: text;
@@ -165,19 +143,9 @@
             border: none;
         }
 
-        .copy-btn:hover {
-            color: #000;
-            background-color: #e5e7eb;
-        }
-
-        .dark .copy-btn {
-            color: #9ca3af;
-        }
-
-        .dark .copy-btn:hover {
-            color: #fff;
-            background-color: #374151;
-        }
+        .copy-btn:hover { color: #000; background-color: #e5e7eb; }
+        .dark .copy-btn { color: #9ca3af; }
+        .dark .copy-btn:hover { color: #fff; background-color: #374151; }
 
         .block-title {
             font-size: 0.875rem;
@@ -224,8 +192,7 @@
         }
 
         .dev-icon {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -236,31 +203,11 @@
             color: #fff;
         }
 
-        .dev-card:hover .dev-icon {
-            transform: scale(1.1) rotate(-5deg);
-        }
+        .dev-card:hover .dev-icon { transform: scale(1.1) rotate(-5deg); }
 
-        .dev-content {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            flex: 1;
-        }
-
-        .dev-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--muted-fg);
-        }
-
-        .dev-name {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--fg);
-            margin-top: 1px;
-        }
+        .dev-content { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+        .dev-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-fg); }
+        .dev-name { font-size: 0.8rem; font-weight: 700; color: var(--fg); margin-top: 1px; }
 
         .menu-panel {
             position: fixed;
@@ -300,11 +247,7 @@
             gap: 0.5rem;
         }
 
-        .theme-toggle {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.25rem;
-        }
+        .theme-toggle { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
 
         .theme-btn {
             flex: 1;
@@ -324,12 +267,7 @@
         }
 
         .theme-btn i { font-size: 1rem; }
-
-        .theme-btn:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-        }
-
+        .theme-btn:hover { border-color: var(--accent); transform: translateY(-2px); }
         .theme-btn.active {
             border-color: var(--accent);
             background: var(--accent);
@@ -375,29 +313,15 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
 
-        .dev-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
+        .dev-links { display: flex; flex-direction: column; gap: 0.5rem; }
 
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
         .hero-glow {
             position: absolute;
-            width: 400px;
-            height: 400px;
+            width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
             border-radius: 50%;
             pointer-events: none;
@@ -407,8 +331,7 @@
 
         .badge-pulse {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background: #22c55e;
             border-radius: 50%;
             animation: pulse 2s infinite;
@@ -543,7 +466,9 @@
                 </h2>
                 <span id="unread-count" class="text-[10px] font-bold px-2.5 py-1 rounded-full hidden" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff;"></span>
             </div>
-            <div id="notifications-list" class="space-y-2"></div>
+            <div id="notifications-list" class="space-y-2">
+                <p class="text-center text-xs py-4" style="color: var(--muted-fg);">Memuat notifikasi...</p>
+            </div>
         </div>
 
         <div class="mb-4">
@@ -566,7 +491,9 @@
                 </div>
             </div>
 
-            <div id="apiList" class="space-y-3"></div>
+            <div id="apiList" class="space-y-3">
+                <p class="text-center text-xs py-4" style="color: var(--muted-fg);">Memuat data API...</p>
+            </div>
         </div>
 
         <div class="flex flex-col mt-10 text-center space-y-2">
@@ -582,613 +509,6 @@
 
     </main>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-
-            const menuBtn = document.getElementById('menuBtn');
-            const menuPanel = document.getElementById('menuPanel');
-
-            menuBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                menuPanel.classList.toggle('open');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!menuPanel.contains(e.target) && !menuBtn.contains(e.target)) {
-                    menuPanel.classList.remove('open');
-                }
-            });
-
-            const btnLight = document.getElementById('btnLight');
-            const btnDark = document.getElementById('btnDark');
-
-            function setTheme(mode) {
-                if (mode === 'dark') {
-                    document.documentElement.classList.add('dark');
-                    btnDark.classList.add('active');
-                    btnLight.classList.remove('active');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                    btnLight.classList.add('active');
-                    btnDark.classList.remove('active');
-                }
-            }
-
-            btnLight.addEventListener('click', () => setTheme('light'));
-            btnDark.addEventListener('click', () => setTheme('dark'));
-
-            const colors = [
-                '#6366f1', '#8b5cf6', '#06b6d4', '#ec4899', '#f59e0b',
-                '#10b981', '#ef4444', '#3b82f6', '#a855f7', '#14b8a6'
-            ];
-
-            const colorGrid = document.getElementById('colorGrid');
-
-            colors.forEach((color, i) => {
-                const swatch = document.createElement('div');
-                swatch.className = 'color-swatch';
-                swatch.style.backgroundColor = color;
-                swatch.style.color = color;
-                if (i === 0) swatch.classList.add('active');
-                swatch.addEventListener('click', () => {
-                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
-                    swatch.classList.add('active');
-                    document.documentElement.style.setProperty('--accent', color);
-                    document.documentElement.style.setProperty('--accent-soft', color + '20');
-                });
-                colorGrid.appendChild(swatch);
-            });
-
-            async function copyToClipboard(text, buttonElement) {
-                if (!buttonElement) return;
-                const originalHTML = buttonElement.innerHTML;
-                try {
-                    await navigator.clipboard.writeText(text);
-                    buttonElement.textContent = 'Copied!';
-                    setTimeout(() => {
-                        buttonElement.innerHTML = originalHTML;
-                    }, 1500);
-                } catch (e) {
-                    console.error('Copy failed', e);
-                    buttonElement.textContent = 'Failed!';
-                    setTimeout(() => {
-                        buttonElement.innerHTML = originalHTML;
-                    }, 1500);
-                }
-            }
-
-            window.copyToClipboard = copyToClipboard;
-
-            function hlJSON(el) {
-                if (window.hljs) {
-                    hljs.highlightElement(el);
-                }
-            }
-
-            function toggleCategory(index) {
-                const category = document.getElementById(`category-${index}`);
-                const icon = document.getElementById(`category-icon-${index}`);
-                const isHidden = category.classList.toggle('hidden');
-                icon.textContent = isHidden ? 'expand_more' : 'expand_less';
-            }
-
-            function toggleEndpoint(catIndex, endpointIndex) {
-                const endpoint = document.getElementById(`endpoint-${catIndex}-${endpointIndex}`);
-                const icon = document.getElementById(`endpoint-icon-${catIndex}-${endpointIndex}`);
-                const isHidden = endpoint.classList.toggle('hidden');
-                icon.textContent = isHidden ? 'expand_more' : 'expand_less';
-            }
-
-            window.toggleCategory = toggleCategory;
-            window.toggleEndpoint = toggleEndpoint;
-
-            async function executeRequest(event, catIndex, endpointIndex, method, path) {
-                event.preventDefault();
-                const form = document.getElementById(`form-${catIndex}-${endpointIndex}`);
-                const responseDiv = document.getElementById(`response-${catIndex}-${endpointIndex}`);
-                const responseContent = document.getElementById(`response-content-${catIndex}-${endpointIndex}`);
-                const clearButton = document.getElementById(`clear-${catIndex}-${endpointIndex}`);
-
-                responseDiv.classList.remove('hidden');
-
-                const formData = new FormData(form);
-                const fetchOptions = {
-                    method: method.toUpperCase()
-                };
-
-                let fullPath = path;
-                let curlCommand = `curl -X ${fetchOptions.method} "${window.location.origin}${path}"`;
-
-                if (fetchOptions.method === 'POST' || fetchOptions.method === 'PUT' || fetchOptions.method === 'PATCH') {
-                    fetchOptions.body = formData;
-                    for (const [key, value] of formData.entries()) {
-                        if (value instanceof File && value.name) {
-                            curlCommand += ` -F "${key}=@${value.name}"`;
-                        } else if (typeof value === 'string') {
-                            curlCommand += ` -F "${key}=${value}"`;
-                        }
-                    }
-                } else {
-                    const params = new URLSearchParams();
-                    for (const [key, value] of formData.entries()) {
-                        if (typeof value === 'string' && value) {
-                            params.append(key, value);
-                        }
-                    }
-                    const queryString = params.toString();
-                    if (queryString) {
-                        fullPath += (path.includes('?') ? '&' : '?') + queryString;
-                    }
-                    curlCommand = `curl -X ${fetchOptions.method} "${window.location.origin}${fullPath}"`;
-                }
-
-                const escapedFullPath = fullPath.replace(/"/g, '&quot;').replace(/'/g, "'");
-                const escapedCurlCommand = curlCommand.replace(/"/g, '&quot;').replace(/'/g, "'");
-
-                responseContent.innerHTML = `
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="block-title">
-                                <span><span class="material-icons text-sm mr-2 align-middle">link</span>REQUEST URL</span>
-                                <button onclick="copyToClipboard('${window.location.origin}${escapedFullPath}', this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
-                            </h4>
-                            <pre class="bg-gray-900 text-white p-2 text-xs overflow-auto rounded"><code>${window.location.origin}${fullPath}</code></pre>
-                        </div>
-                        <div>
-                            <h4 class="block-title">
-                                <span><span class="material-icons text-sm mr-2 align-middle">terminal</span>CURL COMMAND</span>
-                                <button onclick="copyToClipboard(this.parentElement.nextElementSibling.innerText, this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
-                            </h4>
-                            <pre class="bg-gray-900 text-white p-2 text-xs overflow-auto rounded"><code>${curlCommand}</code></pre>
-                        </div>
-                        <div>
-                            <h4 class="block-title">
-                                 <span><span class="material-icons text-sm mr-2 align-middle">storage</span>SERVER RESPONSE</span>
-                                 <button onclick="copyToClipboard(document.getElementById('response-body-${catIndex}-${endpointIndex}').innerText, this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
-                            </h4>
-                            <div id="response-body-${catIndex}-${endpointIndex}" class="bg-gray-900 text-white p-2 text-xs rounded">
-                                Loading...
-                            </div>
-                        </div>
-                    </div>
-                  `;
-
-                const responseBodyDiv = document.getElementById(`response-body-${catIndex}-${endpointIndex}`);
-
-                try {
-                    const response = await fetch(fullPath, fetchOptions);
-                    const contentType = response.headers.get('content-type') || '';
-
-                    let responseBodyContent = '';
-                    if (!response.ok) {
-                        const errText = await response.text().catch(() => '');
-                        throw new Error(`${response.status} ${response.statusText}\n${errText}`);
-                    }
-
-                    if (contentType.includes('application/json')) {
-                        const data = await response.json();
-                        responseBodyContent = `<pre class="max-h-80 overflow-auto"><code class="language-json">${JSON.stringify(data, null, 2)}</code></pre>`;
-                        setTimeout(() => hlJSON(responseBodyDiv.querySelector('code')), 0);
-                    } else if (contentType.startsWith('image/')) {
-                        const blob = await response.blob();
-                        const imageUrl = URL.createObjectURL(blob);
-                        responseBodyContent = `<img src="${imageUrl}" class="max-w-full h-auto rounded-md">`;
-                    } else {
-                        const text = await response.text();
-                        responseBodyContent = `<pre class="max-h-80 overflow-auto">${text}</pre>`;
-                    }
-                    responseBodyDiv.innerHTML = responseBodyContent;
-
-                } catch (err) {
-                    let errMessage = String(err);
-                    if (err.message && err.message.startsWith('404')) {
-                        errMessage = `Error 404: Not Found.\n\nEndpoint tidak ditemukan. Pastikan URL dan parameter sudah benar. Jika Anda yakin ini adalah kesalahan, silakan hubungi owner.`;
-                    }
-                    responseBodyDiv.innerHTML = `<pre class="text-red-400 max-h-80 overflow-auto">${errMessage}</pre>`;
-                }
-                clearButton.classList.remove('hidden');
-            }
-
-            window.executeRequest = executeRequest;
-
-            function clearResponse(catIndex, endpointIndex) {
-                const responseDiv = document.getElementById(`response-${catIndex}-${endpointIndex}`);
-                const responseContent = document.getElementById(`response-content-${catIndex}-${endpointIndex}`);
-                const clearButton = document.getElementById(`clear-${catIndex}-${endpointIndex}`);
-
-                responseDiv.classList.add('fade-out');
-                clearButton.classList.add('hidden');
-
-                setTimeout(() => {
-                    responseContent.innerHTML = '';
-                    responseDiv.classList.add('hidden');
-                    responseDiv.classList.remove('fade-out');
-                }, 200);
-            }
-
-            window.clearResponse = clearResponse;
-
-            async function loadApis() {
-                const apiList = document.getElementById('apiList');
-                try {
-                    const response = await fetch('/src/openapi.json');
-                    const data = await response.json();
-
-                    const categories = {};
-                    if (data.tags) {
-                        data.tags.forEach(tag => {
-                            categories[tag.name] = {
-                                name: tag.name,
-                                items: []
-                            };
-                        });
-                    }
-
-                    Object.keys(data.paths).forEach(path => {
-                        const pathItem = data.paths[path];
-                        Object.keys(pathItem).forEach(method => {
-                            const endpoint = pathItem[method];
-                            const tagName = endpoint.tags && endpoint.tags.length > 0 ? endpoint.tags[0] : 'Uncategorized';
-
-                            if (!categories[tagName]) {
-                                categories[tagName] = {
-                                    name: tagName,
-                                    items: []
-                                };
-                            }
-
-                            categories[tagName].items.push({
-                                path: path,
-                                method: method.toUpperCase(),
-                                name: endpoint.summary || 'No summary',
-                                desc: endpoint.description || 'No description',
-                                status: endpoint.deprecated ? 'deprecated' : 'ready',
-                                parameters: endpoint.parameters,
-                                requestBody: endpoint.requestBody
-                            });
-                        });
-                    });
-
-                    let html = '';
-                    Object.values(categories).forEach((category, catIndex) => {
-                        if (category.items.length === 0) return;
-
-                        html += `
-                        <div class="category-group" data-category="${category.name}">
-                            <div class="mb-2">
-                                <div class="rounded-xl overflow-hidden transition-all duration-250" style="background: var(--card); border: 1px solid var(--border);">
-                                    <button onclick="toggleCategory(${catIndex})" class="w-full px-4 py-3.5 text-left flex items-center justify-between transition-colors duration-150">
-                                        <h2 class="font-extrabold flex items-center">
-                                            <span class="material-icons text-xl mr-3 text-white py-1 px-2 rounded-lg" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">folder</span>
-                                            <span class="truncate max-w-xs text-sm" style="color: var(--fg);">${category.name}</span>
-                                            <span class="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: var(--accent-soft); color: var(--accent);">${category.items.length}</span>
-                                        </h2>
-                                        <span class="material-icons transition-transform duration-150" id="category-icon-${catIndex}" style="color: var(--muted-fg);">expand_more</span>
-                                    </button>
-
-                                    <div id="category-${catIndex}" class="hidden">`;
-
-                        category.items.forEach((item, endpointIndex) => {
-                            const method = item.method;
-                            const path = item.path;
-
-                            const statusClasses = {
-                                'ready': 'background: rgba(34, 197, 94, 0.15); color: #22c55e;',
-                                'deprecated': 'background: rgba(234, 179, 8, 0.15); color: #eab308;',
-                            };
-                            const statusStyle = statusClasses[item.status] || 'background: var(--muted); color: var(--muted-fg);';
-
-                            const methodColors = {
-                                'GET': 'linear-gradient(135deg, #10b981, #059669)',
-                                'POST': 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                                'PUT': 'linear-gradient(135deg, #f59e0b, #d97706)',
-                                'DELETE': 'linear-gradient(135deg, #ef4444, #dc2626)',
-                                'PATCH': 'linear-gradient(135deg, #06b6d4, #0891b2)'
-                            };
-                            const methodBg = methodColors[method] || 'linear-gradient(135deg, #6b7280, #4b5563)';
-
-                            html += `
-                                        <div id="${item.path.split('/').pop()}" class="api-item border-t" style="border-color: var(--border);"
-                                             data-method="${method}"
-                                             data-path="${path}"
-                                             data-alias="${item.name}"
-                                             data-description="${item.desc}"
-                                             data-category="${category.name}">
-                                            <button onclick="toggleEndpoint(${catIndex}, ${endpointIndex})" class="w-full px-4 py-3 text-left flex items-center justify-between transition-colors duration-150">
-                                                <div class="flex items-center min-w-0 flex-1">
-                                                    <span class="inline-block px-2.5 py-1 text-[10px] font-extrabold text-white mr-3 flex-shrink-0 rounded-md" style="background: ${methodBg};">
-                                                        ${method}
-                                                    </span>
-                                                    <div class="flex flex-col min-w-0 flex-1">
-                                                        <span class="font-bold truncate max-w-[90%] font-mono text-xs" style="color: var(--fg);" title="${path}">${path}</span>
-                                                        <div class="flex items-center mt-0.5">
-                                                            <span class="text-[11px] truncate max-w-[90%]" style="color: var(--muted-fg);" title="${item.name}">${item.name}</span>
-                                                            <span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded-md" style="${statusStyle}">${item.status}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <span class="material-icons transition-transform duration-150 flex-shrink-0" id="endpoint-icon-${catIndex}-${endpointIndex}" style="color: var(--muted-fg);">expand_more</span>
-                                            </button>
-
-                                            <div id="endpoint-${catIndex}-${endpointIndex}" class="hidden p-4 border-t space-y-4" style="background: var(--muted); border-color: var(--border);">
-                                                <div class="mb-3">
-                                                    <div class="text-xs leading-relaxed" style="color: var(--muted-fg);">${item.desc}</div>
-                                                </div>
-                                                `;
-                            if (item.status !== 'deprecated') {
-                                html += `
-                                                    <div>
-                                                        <div class="font-extrabold text-xs mb-2 flex items-center gap-1" style="color: var(--fg);">
-                                                            <span class="material-icons text-sm">play_arrow</span>
-                                                            TRY IT OUT
-                                                        </div>
-                                                        <div>
-                                                            <form id="form-${catIndex}-${endpointIndex}" onsubmit="executeRequest(event, ${catIndex}, ${endpointIndex}, '${method}', '${path}')">
-                                                                <div class="mb-4 space-y-3">`;
-                                if (item.parameters) {
-                                    item.parameters.forEach(param => {
-                                        const schema = param.schema || {};
-                                        const isReq = !!param.required;
-                                        const label = `${param.name} ${isReq ? '<span class="text-red-500">*</span>' : ''}`;
-                                        const desc = param.description ? `<div class="text-[10px] mt-1" style="color: var(--muted-fg);">${param.description}</div>` : '';
-                                        const placeholder = (schema.example ?? schema.default ?? '') + '';
-
-                                        if (Array.isArray(schema.enum) && schema.enum.length) {
-                                            html += `
-                                                <div>
-                                                  <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
-                                                  <select name="${param.name}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isReq ? 'required' : ''}>
-                                                    ${schema.enum.map(v => `<option value="${String(v)}">${String(v)}</option>`).join('')}
-                                                  </select>
-                                                  ${desc}
-                                                </div>`;
-                                        } else {
-                                            let type = 'text';
-                                            if (schema.type === 'number' || schema.type === 'integer') type = 'number';
-                                            if (schema.type === 'boolean') {
-                                                html += `
-                                                  <div>
-                                                    <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
-                                                    <select name="${param.name}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isReq ? 'required' : ''}>
-                                                      <option value="true">true</option>
-                                                      <option value="false">false</option>
-                                                    </select>
-                                                    ${desc}
-                                                  </div>`;
-                                            } else {
-                                                html += `
-                                                  <div>
-                                                    <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
-                                                    <input type="${type}" name="${param.name}"
-                                                      class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all"
-                                                      style="background: var(--card); border: 1px solid var(--border); color: var(--fg);"
-                                                      placeholder="${placeholder.replace(/"/g,'&quot;')}" ${isReq ? 'required' : ''}>
-                                                    ${desc}
-                                                  </div>`;
-                                            }
-                                        }
-                                    });
-                                }
-
-                                if (item.requestBody && item.requestBody.content) {
-                                    const content = item.requestBody.content;
-
-                                    if (content['multipart/form-data']) {
-                                        const schema = content['multipart/form-data'].schema || {
-                                            properties: {}
-                                        };
-                                        const required = schema.required || [];
-                                        Object.keys(schema.properties || {}).forEach(propName => {
-                                            const prop = schema.properties[propName] || {};
-                                            const isRequired = required.includes(propName);
-                                            const label = `${propName} ${isRequired ? '<span class="text-red-500">*</span>' : ''}`;
-                                            const desc = prop.description ? `<div class="text-[10px] mt-1" style="color: var(--muted-fg);">${prop.description}</div>` : '';
-                                            const placeholder = (prop.example ?? prop.default ?? '') + '';
-                                            const isFile = prop.format === 'binary';
-
-                                            if (isFile) {
-                                                let accept = '';
-                                                const propDesc = (prop.description || '').toLowerCase();
-                                                if (propName.toLowerCase().includes('image') || propDesc.includes('gambar')) {
-                                                    accept = 'accept="image/*"';
-                                                } else if (propName.toLowerCase().includes('video') || propDesc.includes('vidio')) {
-                                                    accept = 'accept="video/*"';
-                                                }
-                                                html += `
-                                                    <div>
-                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
-                                                        <input type="file" name="${propName}" ${accept}
-                                                            class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all"
-                                                            style="background: var(--card); border: 1px solid var(--border); color: var(--fg);"
-                                                            ${isRequired ? 'required' : ''}>
-                                                        ${desc}
-                                                    </div>`;
-                                            } else if (Array.isArray(prop.enum) && prop.enum.length) {
-                                                html += `
-                                                    <div>
-                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
-                                                        <select name="${propName}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isRequired ? 'required' : ''}>
-                                                            ${prop.enum.map(v => `<option value="${String(v)}">${String(v)}</option>`).join('')}
-                                                        </select>
-                                                        ${desc}
-                                                    </div>`;
-                                            } else if (prop.type === 'boolean') {
-                                                html += `
-                                                    <div>
-                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
-                                                        <select name="${propName}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isRequired ? 'required' : ''}>
-                                                            <option value="true">true</option>
-                                                            <option value="false">false</option>
-                                                        </select>
-                                                        ${desc}
-                                                    </div>`;
-                                            } else {
-                                                let inputType = 'text';
-                                                if (prop.type === 'number' || prop.type === 'integer') {
-                                                    inputType = 'number';
-                                                }
-                                                html += `
-                                                    <div>
-                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
-                                                        <input type="${inputType}" name="${propName}"
-                                                            class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all"
-                                                            style="background: var(--card); border: 1px solid var(--border); color: var(--fg);"
-                                                            placeholder="${placeholder.replace(/"/g, '&quot;')}" ${isRequired ? 'required' : ''}>
-                                                        ${desc}
-                                                    </div>`;
-                                            }
-                                        });
-                                    }
-
-                                    if (content['application/json']) {
-                                        html += `
-                                              <div>
-                                                <label class="block text-xs font-bold mb-2" style="color: var(--fg);">Body (application/json)</label>
-                                                <textarea name="__raw_json__" rows="6" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all font-mono" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" placeholder='{"key":"value"}'></textarea>
-                                                <div class="text-[10px] mt-1" style="color: var(--muted-fg);">Masukkan JSON valid. Jika diisi, body lain akan diabaikan.</div>
-                                              </div>`;
-                                    }
-                                }
-
-                                html += `
-                                                                </div>
-                                                                <button type="submit" class="btn-gradient text-white px-6 py-2.5 text-xs font-extrabold rounded-lg">
-                                                                    <i class="fas fa-play mr-1"></i> Execute
-                                                                </button>
-                                                                <button type="button" id="clear-${catIndex}-${endpointIndex}" onclick="clearResponse(${catIndex}, ${endpointIndex})" class="hidden px-6 py-2.5 text-xs font-bold rounded-lg ml-2 transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);">
-                                                                    Clear
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </div>`;
-                            } else {
-                                html += `<div class="text-xs p-3 rounded-lg" style="background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3);">Endpoint ini sudah tidak digunakan lagi.</div>`;
-                            }
-
-                            html += `
-                                                <div id="response-${catIndex}-${endpointIndex}" class="hidden mt-4">
-                                                    <div class="font-extrabold text-xs mb-2 flex items-center gap-1" style="color: var(--fg);">
-                                                        <span class="material-icons text-sm">code</span>
-                                                        RESPONSE
-                                                    </div>
-                                                    <div id="response-content-${catIndex}-${endpointIndex}" class="text-xs p-4 rounded-lg" style="background: var(--card); border: 1px solid var(--border);">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>`;
-                        });
-                        html += `</div></div></div>`;
-                    });
-                    apiList.innerHTML = html;
-                    const categoriess = apiList.querySelectorAll('.category-group');
-                    categoriess.forEach((category, index) => {
-                        category.classList.add('will-fade-in', 'fade-in');
-                        category.style.animationDelay = `${index * 70}ms`;
-                    });
-                } catch (error) {
-                    apiList.innerHTML = '<p class="text-red-500 text-sm">Gagal memuat data API.</p>';
-                    console.error('Error loading API data:', error);
-                }
-            }
-
-            async function loadNotifications() {
-                const notificationsList = document.getElementById('notifications-list');
-                const unreadCountBadge = document.getElementById('unread-count');
-
-                try {
-                    const response = await fetch(`/src/notifications.json?t=${Date.now()}`);
-                    let notifications = await response.json();
-
-                    if (!Array.isArray(notifications)) {
-                        notifications = notifications ? [notifications] : [];
-                    }
-
-                    notificationsList.innerHTML = '';
-                    let unreadCount = 0;
-
-                    notifications.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-
-                    notifications.forEach((notif, index) => {
-                        if (!notif.read) unreadCount++;
-
-                        const notifElement = document.createElement('div');
-                        notifElement.className = `p-4 text-xs rounded-xl will-fade-in fade-in transition-all ${notif.read ? 'opacity-60' : ''}`;
-                        notifElement.style.background = 'var(--card)';
-                        notifElement.style.border = '1px solid var(--border)';
-                        notifElement.style.animationDelay = `${index * 50}ms`;
-                        notifElement.innerHTML = `
-                            <div class="flex justify-between items-start">
-                                <div class="flex-1">
-                                    <p class="font-extrabold mb-1" style="color: var(--fg);">${notif.title || 'Tanpa Judul'}</p>
-                                    <p class="leading-relaxed" style="color: var(--muted-fg);">${notif.message || '-'}</p>
-                                </div>
-                                <div class="flex items-center ml-4 flex-shrink-0">
-                                    ${!notif.read ? '<div class="w-2 h-2 bg-green-400 rounded-full mr-2" title="Unread"></div>' : ''}
-                                    <span style="color: var(--muted-fg);">${notif.date ? new Date(notif.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'}</span>
-                                </div>
-                            </div>
-                        `;
-                        notificationsList.appendChild(notifElement);
-                    });
-
-                    if (unreadCount > 0) {
-                        unreadCountBadge.textContent = unreadCount;
-                        unreadCountBadge.classList.remove('hidden');
-                    } else {
-                        unreadCountBadge.classList.add('hidden');
-                    }
-
-                    if (notifications.length === 0) {
-                        notificationsList.innerHTML = '<p class="text-center text-xs py-4" style="color: var(--muted-fg);">Tidak ada notifikasi</p>';
-                    }
-
-                } catch (error) {
-                    console.error('Gagal memuat notifikasi:', error);
-                    notificationsList.innerHTML = '<p class="text-center text-red-500 text-xs py-4">Gagal memuat notifikasi</p>';
-                    unreadCountBadge.classList.add('hidden');
-                }
-            }
-
-            document.getElementById('searchInput').addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const apiItems = document.querySelectorAll('.api-item');
-                const categories = document.querySelectorAll('.category-group');
-                const noResults = document.getElementById('noResults');
-                let visibleCount = 0;
-
-                apiItems.forEach(item => {
-                    const path = item.dataset.path.toLowerCase();
-                    const alias = item.dataset.alias.toLowerCase();
-                    const description = item.dataset.description.toLowerCase();
-
-                    if (path.includes(searchTerm) || alias.includes(searchTerm) || description.includes(searchTerm)) {
-                        item.style.display = '';
-                        visibleCount++;
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-
-                categories.forEach(category => {
-                    const visibleItems = category.querySelectorAll('.api-item[style=""]');
-                    if (visibleItems.length > 0) {
-                        category.style.display = '';
-                    } else {
-                        category.style.display = 'none';
-                    }
-                });
-
-                if (visibleCount === 0) {
-                    noResults.style.display = 'block';
-                } else {
-                    noResults.style.display = 'none';
-                }
-            });
-
-            loadApis();
-            loadNotifications();
-
-        });
-    </script>
+    <script src="./script.js"></script>
 </body>
 </html>
