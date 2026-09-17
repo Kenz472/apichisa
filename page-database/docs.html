@@ -6,7 +6,7 @@
     <meta name="description" content="Chisa APIs - Koleksi endpoint API modern, script, dan tools. Temukan yang kamu butuhkan atau jelajahi hal baru.">
     <meta name="theme-color" content="#0a0e1a">
     <title>Chisa APIs — by Kenz Coding</title>
-    <link rel="icon" href="/src/icon.png" type="image/png">
+    <link rel="icon" href="/Apiys/icon.png" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -121,16 +121,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-
-        .btn-gradient {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            transition: all 0.3s ease;
-        }
-
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.5);
         }
 
         .copy-btn {
@@ -386,7 +376,7 @@
         </div>
 
         <div class="menu-section-title">
-            <i class="fas fa-palette"></i> Warna Text
+            <i class="fas fa-palette"></i> Warna Tema Utama
         </div>
         <div class="color-grid" id="colorGrid"></div>
 
@@ -509,6 +499,597 @@
 
     </main>
 
-    <script src="./script.js"></script>
+    <script>
+        // --- 1. Menu Panel, Theme & Accent Color Controller ---
+        const menuBtn = document.getElementById('menuBtn');
+        const menuPanel = document.getElementById('menuPanel');
+        const btnLight = document.getElementById('btnLight');
+        const btnDark = document.getElementById('btnDark');
+        const colorGrid = document.getElementById('colorGrid');
+
+        // Toggle dropdown menu
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuPanel.classList.toggle('open');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!menuPanel.contains(e.target) && e.target !== menuBtn) {
+                menuPanel.classList.remove('open');
+            }
+        });
+
+        // Theme Switcher (Light / Dark)
+        function setTheme(mode) {
+            const html = document.documentElement;
+            if (mode === 'dark') {
+                html.classList.add('dark');
+                btnDark.classList.add('active');
+                btnLight.classList.remove('active');
+                localStorage.setItem('chisa_theme', 'dark');
+            } else {
+                html.classList.remove('dark');
+                btnLight.classList.add('active');
+                btnDark.classList.remove('active');
+                localStorage.setItem('chisa_theme', 'light');
+            }
+        }
+
+        btnLight.addEventListener('click', () => setTheme('light'));
+        btnDark.addEventListener('click', () => setTheme('dark'));
+
+        // Load Saved Theme
+        const savedTheme = localStorage.getItem('chisa_theme') || 'dark';
+        setTheme(savedTheme);
+
+        // Accent Colors Switcher
+        const colors = [
+            { name: 'Indigo', hex: '#6366f1', soft: 'rgba(99, 102, 241, 0.15)' },
+            { name: 'Violet', hex: '#8b5cf6', soft: 'rgba(139, 92, 246, 0.15)' },
+            { name: 'Cyan', hex: '#06b6d4', soft: 'rgba(6, 182, 212, 0.15)' },
+            { name: 'Emerald', hex: '#10b981', soft: 'rgba(16, 185, 129, 0.15)' },
+            { name: 'Rose', hex: '#f43f5e', soft: 'rgba(244, 63, 94, 0.15)' }
+        ];
+
+        const savedColorHex = localStorage.getItem('chisa_accent') || '#6366f1';
+
+        colors.forEach(c => {
+            const swatch = document.createElement('div');
+            swatch.className = `color-swatch ${c.hex === savedColorHex ? 'active' : ''}`;
+            swatch.style.backgroundColor = c.hex;
+            swatch.title = c.name;
+            swatch.addEventListener('click', () => {
+                document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                swatch.classList.add('active');
+                document.documentElement.style.setProperty('--accent', c.hex);
+                document.documentElement.style.setProperty('--accent-soft', c.soft);
+                localStorage.setItem('chisa_accent', c.hex);
+            });
+            colorGrid.appendChild(swatch);
+        });
+
+        // Apply saved accent color on load
+        const activeColorObj = colors.find(c => c.hex === savedColorHex) || colors[0];
+        document.documentElement.style.setProperty('--accent', activeColorObj.hex);
+        document.documentElement.style.setProperty('--accent-soft', activeColorObj.soft);
+
+
+        // --- 2. Notifications Loader ---
+        async function loadNotifications() {
+            const notificationsList = document.getElementById('notifications-list');
+            const unreadCountBadge = document.getElementById('unread-count');
+
+            try {
+                const response = await fetch(`notifications.json?t=${Date.now()}`);
+                if (!response.ok) throw new Error('File notifications.json tidak ditemukan');
+                let notifications = await response.json();
+
+                if (!Array.isArray(notifications)) {
+                    notifications = notifications ? [notifications] : [];
+                }
+
+                notificationsList.innerHTML = ''; 
+                let unreadCount = 0;
+
+                notifications.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+                notifications.forEach((notif, index) => {
+                    if (!notif.read) unreadCount++;
+
+                    const notifElement = document.createElement('div');
+                    notifElement.className = `p-4 text-xs will-fade-in fade-in rounded-xl border ${notif.read ? 'opacity-60' : ''}`;
+                    notifElement.style.backgroundColor = 'var(--card)';
+                    notifElement.style.borderColor = 'var(--border)';
+                    notifElement.style.animationDelay = `${index * 50}ms`;
+                    
+                    notifElement.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div class="flex-1">
+                                <p class="font-bold mb-1" style="color: var(--fg);">${notif.title || 'Tanpa Judul'}</p>
+                                <p style="color: var(--muted-fg);">${notif.message || '-'}</p>
+                            </div>
+                            <div class="flex items-center ml-4 flex-shrink-0">
+                                ${!notif.read ? '<div class="w-2 h-2 bg-emerald-400 rounded-full mr-2" title="Unread"></div>' : ''}
+                                <span style="color: var(--muted-fg);">${notif.date ? new Date(notif.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'}</span>
+                            </div>
+                        </div>
+                    `;
+                    notificationsList.appendChild(notifElement);
+                });
+
+                if (unreadCount > 0) {
+                    unreadCountBadge.textContent = unreadCount;
+                    unreadCountBadge.classList.remove('hidden');
+                } else {
+                    unreadCountBadge.classList.add('hidden');
+                }
+
+                if (notifications.length === 0) {
+                    notificationsList.innerHTML = '<p class="text-center text-xs py-4" style="color: var(--muted-fg);">Tidak ada notifikasi</p>';
+                }
+
+            } catch (error) {
+                console.error('Gagal memuat notifikasi:', error);
+                notificationsList.innerHTML = '<p class="text-center text-xs py-4" style="color: var(--muted-fg);">Belum ada file notifikasi / gagal dimuat.</p>';
+                unreadCountBadge.classList.add('hidden');
+            }
+        }
+
+
+        // --- 3. Utility Helpers ---
+        async function copyToClipboard(text, buttonElement) {
+            if (!buttonElement) return;
+            const originalHTML = buttonElement.innerHTML;
+            try {
+                await navigator.clipboard.writeText(text);
+                buttonElement.textContent = 'Copied!';
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalHTML;
+                }, 1500);
+            } catch (e) {
+                console.error('Copy failed', e);
+                buttonElement.textContent = 'Failed!';
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalHTML;
+                }, 1500);
+            }
+        }
+
+        function hlJSON(el) {
+            if (window.hljs) {
+                hljs.highlightElement(el);
+            }
+        }
+
+        function toggleCategory(index) {
+            const category = document.getElementById(`category-${index}`);
+            const icon = document.getElementById(`category-icon-${index}`);
+            const isHidden = category.classList.toggle('hidden');
+            icon.textContent = isHidden ? 'expand_more' : 'expand_less';
+        }
+
+        function toggleEndpoint(catIndex, endpointIndex) {
+            const endpoint = document.getElementById(`endpoint-${catIndex}-${endpointIndex}`);
+            const icon = document.getElementById(`endpoint-icon-${catIndex}-${endpointIndex}`);
+            const isHidden = endpoint.classList.toggle('hidden');
+            icon.textContent = isHidden ? 'expand_more' : 'expand_less';
+        }
+
+
+        // --- 4. Execute API Request & Dynamic CURL Generator ---
+        async function executeRequest(event, catIndex, endpointIndex, method, path) {
+            event.preventDefault();
+            const form = document.getElementById(`form-${catIndex}-${endpointIndex}`);
+            const responseDiv = document.getElementById(`response-${catIndex}-${endpointIndex}`);
+            const responseContent = document.getElementById(`response-content-${catIndex}-${endpointIndex}`);
+            const clearButton = document.getElementById(`clear-${catIndex}-${endpointIndex}`);
+
+            responseDiv.classList.remove('hidden');
+
+            const formData = new FormData(form);
+            const fetchOptions = {
+                method: method.toUpperCase()
+            };
+
+            let fullPath = path;
+            let curlCommand = `curl -X ${fetchOptions.method} "${window.location.origin}${path}"`;
+
+            if (fetchOptions.method === 'POST' || fetchOptions.method === 'PUT' || fetchOptions.method === 'PATCH') {
+                fetchOptions.body = formData;
+                for (const [key, value] of formData.entries()) {
+                    if (value instanceof File && value.name) {
+                        curlCommand += ` -F "${key}=@${value.name}"`;
+                    } else if (typeof value === 'string') {
+                        curlCommand += ` -F "${key}=${value}"`;
+                    }
+                }
+            } else { 
+                const params = new URLSearchParams();
+                for (const [key, value] of formData.entries()) {
+                    if (typeof value === 'string' && value) {
+                        params.append(key, value);
+                    }
+                }
+                const queryString = params.toString();
+                if (queryString) {
+                    fullPath += (path.includes('?') ? '&' : '?') + queryString;
+                }
+                curlCommand = `curl -X ${fetchOptions.method} "${window.location.origin}${fullPath}"`;
+            }
+
+            const escapedFullPath = fullPath.replace(/"/g, '&quot;');
+            
+            responseContent.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="block-title">
+                            <span><span class="material-icons text-sm mr-2 align-middle">link</span>REQUEST URL</span>
+                            <button onclick="copyToClipboard('${window.location.origin}${escapedFullPath}', this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
+                        </h4>
+                        <pre class="bg-gray-900 text-white p-2 text-xs overflow-auto"><code>${window.location.origin}${fullPath}</code></pre>
+                    </div>
+                    <div>
+                        <h4 class="block-title">
+                            <span><span class="material-icons text-sm mr-2 align-middle">terminal</span>CURL COMMAND</span>
+                            <button onclick="copyToClipboard(this.parentElement.nextElementSibling.innerText, this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
+                        </h4>
+                        <pre class="bg-gray-900 text-white p-2 text-xs overflow-auto"><code>${curlCommand}</code></pre>
+                    </div>
+                    <div>
+                        <h4 class="block-title">
+                             <span><span class="material-icons text-sm mr-2 align-middle">storage</span>SERVER RESPONSE</span>
+                             <button onclick="copyToClipboard(document.getElementById('response-body-${catIndex}-${endpointIndex}').innerText, this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
+                        </h4>
+                        <div id="response-body-${catIndex}-${endpointIndex}" class="bg-gray-900 text-white p-2 text-xs">
+                            Loading...
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const responseBodyDiv = document.getElementById(`response-body-${catIndex}-${endpointIndex}`);
+
+            try {
+                const response = await fetch(fullPath, fetchOptions);
+                const contentType = response.headers.get('content-type') || '';
+
+                let responseBodyContent = '';
+                if (!response.ok) {
+                    const errText = await response.text().catch(() => '');
+                    throw new Error(`${response.status} ${response.statusText}\n${errText}`);
+                }
+
+                if (contentType.includes('application/json')) {
+                    const data = await response.json();
+                    responseBodyContent = `<pre class="max-h-80 overflow-auto"><code class="language-json">${JSON.stringify(data, null, 2)}</code></pre>`;
+                    setTimeout(() => hlJSON(responseBodyDiv.querySelector('code')), 0);
+                } else if (contentType.startsWith('image/')) {
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    responseBodyContent = `<img src="${imageUrl}" class="max-w-full h-auto rounded-md">`;
+                } else {
+                    const text = await response.text();
+                    responseBodyContent = `<pre class="max-h-80 overflow-auto">${text}</pre>`;
+                }
+                responseBodyDiv.innerHTML = responseBodyContent;
+
+            } catch (err) {
+                let errMessage = String(err);
+                if (err.message && err.message.startsWith('404')) {
+                    errMessage = `Error 404: Not Found.\n\nEndpoint tidak ditemukan. Pastikan URL dan parameter sudah benar.`;
+                }
+                responseBodyDiv.innerHTML = `<pre class="text-red-400 max-h-80 overflow-auto">${errMessage}</pre>`;
+            }
+            clearButton.classList.remove('hidden');
+        }
+
+        function clearResponse(catIndex, endpointIndex) {
+            const responseDiv = document.getElementById(`response-${catIndex}-${endpointIndex}`);
+            const responseContent = document.getElementById(`response-content-${catIndex}-${endpointIndex}`);
+            const clearButton = document.getElementById(`clear-${catIndex}-${endpointIndex}`);
+
+            responseDiv.classList.add('fade-out');
+            clearButton.classList.add('hidden');
+
+            setTimeout(() => {
+                responseContent.innerHTML = '';
+                responseDiv.classList.add('hidden');
+                responseDiv.classList.remove('fade-out');
+            }, 200);
+        }
+
+
+        // --- 5. OpenAPI Specification Loader ---
+        async function loadApis() {
+            const apiList = document.getElementById('apiList');
+            try {
+                const response = await fetch('/Apiys/openapi.json');
+                if (!response.ok) throw new Error('Gagal mengambil file openapi.json');
+                const data = await response.json();
+
+                const categories = {};
+                if (data.tags) {
+                    data.tags.forEach(tag => {
+                        categories[tag.name] = { name: tag.name, items: [] };
+                    });
+                }
+
+                Object.keys(data.paths).forEach(path => {
+                    const pathItem = data.paths[path];
+                    Object.keys(pathItem).forEach(method => {
+                        const endpoint = pathItem[method];
+                        const tagName = endpoint.tags && endpoint.tags.length > 0 ? endpoint.tags[0] : 'Uncategorized';
+
+                        if (!categories[tagName]) {
+                            categories[tagName] = { name: tagName, items: [] };
+                        }
+
+                        categories[tagName].items.push({
+                            path: path,
+                            method: method.toUpperCase(),
+                            name: endpoint.summary || 'No summary',
+                            desc: endpoint.description || 'No description',
+                            status: endpoint.deprecated ? 'deprecated' : 'ready',
+                            parameters: endpoint.parameters,
+                            requestBody: endpoint.requestBody
+                        });
+                    });
+                });
+
+                let html = '';
+                Object.values(categories).forEach((category, catIndex) => {
+                    if (category.items.length === 0) return;
+
+                    html += `
+                    <div class="category-group" data-category="${category.name}">
+                        <div class="mb-2">
+                            <div class="rounded-xl overflow-hidden transition-colors duration-150" style="background: var(--card); border: 1px solid var(--border);">
+                                <button onclick="toggleCategory(${catIndex})" class="w-full px-4 py-3 text-left flex items-center justify-between transition-colors duration-150">
+                                    <h2 class="font-bold flex items-center" style="color: var(--fg);">
+                                        <span class="material-icons text-xl mr-3 p-1 rounded-lg text-white" style="background: var(--accent);">folder</span>
+                                        <span class="truncate max-w-xs text-sm">${category.name}</span>
+                                        <span class="ml-2 text-xs" style="color: var(--muted-fg);">(${category.items.length})</span>
+                                    </h2>
+                                    <span class="material-icons transition-transform duration-150" style="color: var(--muted-fg);" id="category-icon-${catIndex}">expand_more</span>
+                                </button>
+                                
+                                <div id="category-${catIndex}" class="hidden">`;
+
+                    category.items.forEach((item, endpointIndex) => {
+                        const method = item.method;
+                        const path = item.path;
+
+                        const statusClasses = {
+                            'ready': 'bg-emerald-500/20 text-emerald-400',
+                            'deprecated': 'bg-amber-500/20 text-amber-400',
+                        };
+                        const statusClass = statusClasses[item.status] || 'bg-gray-600';
+
+                        const methodClasses = {
+                            'GET': 'bg-blue-600',
+                            'POST': 'bg-emerald-600',
+                            'PUT': 'bg-amber-600',
+                            'DELETE': 'bg-rose-600'
+                        };
+                        const methodClass = methodClasses[method] || 'bg-gray-600';
+
+                        html += `
+                                    <div class="border-t api-item" style="border-color: var(--border);"
+                                         data-method="${method}"
+                                         data-path="${path}"
+                                         data-alias="${item.name}"
+                                         data-description="${item.desc}"
+                                         data-category="${category.name}">
+                                        <button onclick="toggleEndpoint(${catIndex}, ${endpointIndex})" class="w-full px-4 py-3 text-left flex items-center justify-between transition-colors duration-150">
+                                            <div class="flex items-center min-w-0 flex-1">
+                                                <span class="inline-block px-2.5 py-1 text-[10px] font-bold text-white rounded-md mr-3 flex-shrink-0 ${methodClass}">
+                                                    ${method}
+                                                </span>
+                                                <div class="flex flex-col min-w-0 flex-1">
+                                                    <span class="font-semibold truncate max-w-[90%] font-mono text-xs" style="color: var(--fg);" title="${path}">${path}</span>
+                                                    <div class="flex items-center mt-0.5">
+                                                        <span class="text-[11px] truncate max-w-[90%]" style="color: var(--muted-fg);" title="${item.name}">${item.name}</span>
+                                                        <span class="ml-2 px-1.5 py-0.5 text-[10px] rounded ${statusClass}">${item.status}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="material-icons transition-transform duration-150 flex-shrink-0" style="color: var(--muted-fg);" id="endpoint-icon-${catIndex}-${endpointIndex}">expand_more</span>
+                                        </button>
+                                        
+                                        <div id="endpoint-${catIndex}-${endpointIndex}" class="hidden p-4 border-t space-y-4" style="background: var(--muted); border-color: var(--border);">
+                                            <div class="mb-3">
+                                                <div class="text-xs" style="color: var(--muted-fg);">${item.desc}</div>
+                                            </div>`;
+
+                        if (item.status !== 'deprecated') {
+                            html += `
+                                                <div>
+                                                    <div class="font-bold text-xs mb-2 flex items-center" style="color: var(--fg);">
+                                                        <span class="material-icons text-sm mr-1" style="color: var(--accent);">play_arrow</span>
+                                                        TRY IT OUT
+                                                    </div>
+                                                    <div>
+                                                        <form id="form-${catIndex}-${endpointIndex}" onsubmit="executeRequest(event, ${catIndex}, ${endpointIndex}, '${method}', '${path}')">
+                                                            <div class="mb-4 space-y-3">`;
+
+                            if (item.parameters) {
+                                item.parameters.forEach(param => {
+                                    const schema = param.schema || {};
+                                    const isReq = !!param.required;
+                                    const label = `${param.name} ${isReq ? '<span class="text-rose-500">*</span>' : ''}`;
+                                    const desc = param.description ? `<div class="text-[10px] mt-1" style="color: var(--muted-fg);">${param.description}</div>` : '';
+                                    const placeholder = (schema.example ?? schema.default ?? '') + '';
+
+                                    if (Array.isArray(schema.enum) && schema.enum.length) {
+                                        html += `
+                                            <div>
+                                              <label class="block text-xs font-medium mb-1.5" style="color: var(--fg);">${label}</label>
+                                              <select name="${param.name}" class="w-full px-3 py-2 rounded-lg border text-xs focus:outline-none" style="background: var(--card); border-color: var(--border); color: var(--fg);" ${isReq ? 'required' : ''}>
+                                                ${schema.enum.map(v => `<option value="${String(v)}">${String(v)}</option>`).join('')}
+                                              </select>
+                                              ${desc}
+                                            </div>`;
+                                    } else {
+                                        let type = 'text';
+                                        if (schema.type === 'number' || schema.type === 'integer') type = 'number';
+                                        if (schema.type === 'boolean') {
+                                            html += `
+                                              <div>
+                                                <label class="block text-xs font-medium mb-1.5" style="color: var(--fg);">${label}</label>
+                                                <select name="${param.name}" class="w-full px-3 py-2 rounded-lg border text-xs focus:outline-none" style="background: var(--card); border-color: var(--border); color: var(--fg);" ${isReq ? 'required' : ''}>
+                                                  <option value="true">true</option>
+                                                  <option value="false">false</option>
+                                                </select>
+                                                ${desc}
+                                              </div>`;
+                                        } else {
+                                            html += `
+                                              <div>
+                                                <label class="block text-xs font-medium mb-1.5" style="color: var(--fg);">${label}</label>
+                                                <input type="${type}" name="${param.name}"
+                                                  class="w-full px-3 py-2 rounded-lg border text-xs focus:outline-none" style="background: var(--card); border-color: var(--border); color: var(--fg);"
+                                                  placeholder="${placeholder.replace(/"/g,'&quot;')}" ${isReq ? 'required' : ''}>
+                                                ${desc}
+                                              </div>`;
+                                        }
+                                    }
+                                });
+                            }
+
+                            if (item.requestBody && item.requestBody.content) {
+                                const content = item.requestBody.content;
+
+                                if (content['multipart/form-data']) {
+                                    const schema = content['multipart/form-data'].schema || { properties: {} };
+                                    const required = schema.required || [];
+                                    Object.keys(schema.properties || {}).forEach(propName => {
+                                        const prop = schema.properties[propName] || {};
+                                        const isRequired = required.includes(propName);
+                                        const label = `${propName} ${isRequired ? '<span class="text-rose-500">*</span>' : ''}`;
+                                        const desc = prop.description ? `<div class="text-[10px] mt-1" style="color: var(--muted-fg);">${prop.description}</div>` : '';
+                                        const placeholder = (prop.example ?? prop.default ?? '') + '';
+                                        const isFile = prop.format === 'binary';
+
+                                        if (isFile) {
+                                            let accept = '';
+                                            const propDesc = (prop.description || '').toLowerCase();
+                                            if (propName.toLowerCase().includes('image') || propDesc.includes('gambar')) {
+                                                accept = 'accept="image/*"';
+                                            } else if (propName.toLowerCase().includes('video') || propDesc.includes('vidio')) {
+                                                accept = 'accept="video/*"';
+                                            }
+                                            html += `
+                                                <div>
+                                                    <label class="block text-xs font-medium mb-1.5" style="color: var(--fg);">${label}</label>
+                                                    <input type="file" name="${propName}" ${accept}
+                                                        class="w-full px-3 py-2 rounded-lg border text-xs focus:outline-none" style="background: var(--card); border-color: var(--border); color: var(--fg);"
+                                                        ${isRequired ? 'required' : ''}>
+                                                    ${desc}
+                                                </div>`;
+                                        } else {
+                                            html += `
+                                                <div>
+                                                    <label class="block text-xs font-medium mb-1.5" style="color: var(--fg);">${label}</label>
+                                                    <input type="text" name="${propName}"
+                                                        class="w-full px-3 py-2 rounded-lg border text-xs focus:outline-none" style="background: var(--card); border-color: var(--border); color: var(--fg);"
+                                                        placeholder="${placeholder.replace(/"/g, '&quot;')}" ${isRequired ? 'required' : ''}>
+                                                    ${desc}
+                                                </div>`;
+                                        }
+                                    });
+                                }
+                            }
+
+                            html += `
+                                                            </div>
+                                                            <button type="submit" class="font-semibold text-white px-5 py-2 text-xs rounded-lg transition-all duration-150" style="background: var(--accent);">
+                                                                Execute
+                                                            </button>
+                                                            <button type="button" id="clear-${catIndex}-${endpointIndex}" onclick="clearResponse(${catIndex}, ${endpointIndex})" class="hidden border font-semibold px-5 py-2 text-xs rounded-lg transition-colors duration-150 ml-2" style="background: var(--card); border-color: var(--border); color: var(--fg);">
+                                                                Clear
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>`;
+                        } else {
+                            html += `<div class="text-amber-400 text-xs p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">Endpoint ini tidak digunakan lagi (Deprecated).</div>`;
+                        }
+
+                        html += `
+                                            <div id="response-${catIndex}-${endpointIndex}" class="hidden mt-4">
+                                                <div class="font-bold text-xs mb-2 flex items-center" style="color: var(--fg);">
+                                                    <span class="material-icons text-sm mr-1" style="color: var(--accent);">code</span>
+                                                    RESPONSE
+                                                </div>
+                                                <div id="response-content-${catIndex}-${endpointIndex}" class="text-xs p-4 rounded-lg border" style="background: var(--card); border-color: var(--border);">
+                                                    <!-- Response rendered here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                    });
+                    html += `</div></div></div></div>`;
+                });
+                
+                apiList.innerHTML = html;
+                
+                const categoriesGroup = apiList.querySelectorAll('.category-group');
+                categoriesGroup.forEach((category, index) => {
+                    category.classList.add('will-fade-in', 'fade-in');
+                    category.style.animationDelay = `${index * 70}ms`;
+                });
+
+            } catch (error) {
+                apiList.innerHTML = '<p class="text-red-500 text-center text-xs py-4">Gagal memuat data API (openapi.json tidak ditemukan).</p>';
+                console.error('Error loading API data:', error);
+            }
+        }
+
+
+        // --- 6. Live Search Functionality ---
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const apiItems = document.querySelectorAll('.api-item');
+            const categories = document.querySelectorAll('.category-group');
+            const noResults = document.getElementById('noResults');
+            let visibleCount = 0;
+
+            apiItems.forEach(item => {
+                const path = item.dataset.path.toLowerCase();
+                const alias = item.dataset.alias.toLowerCase();
+                const description = item.dataset.description.toLowerCase();
+
+                if (path.includes(searchTerm) || alias.includes(searchTerm) || description.includes(searchTerm)) {
+                    item.style.display = '';
+                    visibleCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            categories.forEach(category => {
+                const visibleItems = category.querySelectorAll('.api-item[style=""]');
+                if (visibleItems.length > 0) {
+                    category.style.display = '';
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+        });
+
+
+        // --- 7. Initializer on Page Loaded ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadApis();
+            loadNotifications();
+        });
+    </script>
 </body>
 </html>

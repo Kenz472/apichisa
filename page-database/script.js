@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadNotifications();
 
         try {
-            const response = await fetch('/src/openapi.json');
+            const response = await fetch('/Apiys/openapi.json');
             if (!response.ok) throw new Error(`Gagal memuat pengaturan: ${response.status}`);
             settings = await response.json();
             populatePageContent();
@@ -348,12 +348,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 DOM.dynamicImage.alt = settings.name ? `${settings.name} Banner` : "API Banner";
                 DOM.dynamicImage.style.display = '';
             } else {
-                DOM.dynamicImage.src = '/src/banner.jpg';
+                DOM.dynamicImage.src = '/Apiys/banner.jpg';
                 DOM.dynamicImage.alt = "API Banner Default";
                 DOM.dynamicImage.style.display = '';
             }
             DOM.dynamicImage.onerror = () => {
-                DOM.dynamicImage.src = '/src/banner.jpg';
+                DOM.dynamicImage.src = '/Apiys/banner.jpg';
                 DOM.dynamicImage.alt = "API Banner Fallback";
                 DOM.dynamicImage.style.display = '';
                 showToast('Gagal memuat gambar banner, menggunakan gambar default.', 'warning');
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (DOM.apiLinksContainer) {
             DOM.apiLinksContainer.innerHTML = '';
-            const defaultLinks = [{ url: "https://github.com/FlowFalcon/Falcon-Api-UI", name: "Lihat di GitHub", icon: "fab fa-github" }];
+            const defaultLinks = [{ url: "https://github.com/Kenz472/apichisa, name: "Lihat di GitHub", icon: "fab fa-github" }];
             const linksToRender = settings.links?.length ? settings.links : defaultLinks;
 
             linksToRender.forEach(({ url, name, icon }, index) => {
