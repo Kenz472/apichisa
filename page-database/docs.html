@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chisa APIs - Koleksi endpoint API modern, script, dan tools. Temukan yang kamu butuhkan atau jelajahi hal baru.">
+    <meta name="theme-color" content="#0a0e1a">
+    <title>Chisa APIs — by Kenz Coding</title>
+    <link rel="icon" href="/src/icon.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/languages/json.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['Ubuntu Mono', 'monospace'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg: #f9fbff;
+            --fg: #0f172a;
+            --card: #ffffff;
+            --muted: #f1f5f9;
+            --muted-fg: #64748b;
+            --border: rgba(0, 0, 0, 0.08);
+            --accent: #6366f1;
+            --accent-soft: rgba(99, 102, 241, 0.12);
+        }
+
+        .dark {
+            --bg: #0a0e1a;
+            --fg: #e8edf5;
+            --card: #111827;
+            --muted: #1e293b;
+            --muted-fg: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --accent: #818cf8;
+            --accent-soft: rgba(129, 140, 248, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--fg);
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .biground-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 900px;
+            height: 900px;
+            max-width: 95vw;
+            max-height: 95vh;
+            background-image: url('https://i.pinimg.com/originals/41/ce/7b/41ce7b66da0ad1997d09985e67c2a348.jpg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.32;
+            z-index: 0;
+            pointer-events: none;
+            animation: bigroundFloat 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 60px rgba(99, 102, 241, 0.25));
+            transition: opacity 0.4s ease;
+        }
+
+        .dark .biground-bg {
+            opacity: 0.48;
+            filter: drop-shadow(0 0 80px rgba(99, 102, 241, 0.4));
+        }
+
+        @keyframes bigroundFloat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) scale(1.05) rotate(2deg); }
+        }
+
+        .glass {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.125);
+        }
+
+        .dark .glass {
+            background: rgba(17, 24, 39, 0.75);
+        }
+
+        .loader {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid #4a5568;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.5);
+        }
+
+        .copy-btn {
+            color: #6b7280;
+            padding: 4px;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+
+        .copy-btn:hover {
+            color: #000;
+            background-color: #e5e7eb;
+        }
+
+        .dark .copy-btn {
+            color: #9ca3af;
+        }
+
+        .dark .copy-btn:hover {
+            color: #fff;
+            background-color: #374151;
+        }
+
+        .block-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--fg);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .will-fade-in { opacity: 0; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.98); }
+        }
+
+        .fade-out { animation: fadeOut 0.2s ease-out forwards; }
+
+        .dev-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 0.9rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: var(--fg);
+        }
+
+        .dev-card:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.3);
+        }
+
+        .dev-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
+        .dev-card:hover .dev-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .dev-content {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .dev-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted-fg);
+        }
+
+        .dev-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--fg);
+            margin-top: 1px;
+        }
+
+        .menu-panel {
+            position: fixed;
+            top: 75px;
+            right: 1.5rem;
+            width: 300px;
+            max-height: calc(100vh - 90px);
+            overflow-y: auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            padding: 1.25rem;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.97);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+        }
+
+        .menu-panel.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .menu-section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--muted-fg);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .theme-btn {
+            flex: 1;
+            padding: 0.7rem;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: var(--muted);
+            color: var(--fg);
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .theme-btn i { font-size: 1rem; }
+
+        .theme-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .theme-btn.active {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .color-swatch {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .color-swatch:hover { transform: scale(1.12); }
+
+        .color-swatch.active {
+            border-color: #fff;
+            box-shadow: 0 0 0 2px var(--accent), 0 0 15px currentColor;
+            transform: scale(1.08);
+        }
+
+        .color-swatch.active::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.7rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .dev-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .badge-pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        @media (max-width: 640px) {
+            .biground-bg { width: 500px; height: 500px; opacity: 0.25; }
+            .menu-panel { right: 1rem; left: 1rem; width: auto; }
+        }
+    </style>
+</head>
+
+<body class="antialiased font-mono min-h-screen relative">
+
+    <div class="bg-grid"></div>
+    <div class="biground-bg"></div>
+
+    <header class="glass sticky top-0 z-50 border-b" style="border-color: var(--border);">
+        <div class="max-w-2xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex gap-3 items-center">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);">
+                    <i class="fas fa-bolt text-white text-sm"></i>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                    <h2 class="text-base font-extrabold leading-none" style="color: var(--fg);">Chisa APIs</h2>
+                    <p class="text-[10px] leading-none" style="color: var(--muted-fg);">by Kenz Coding · v1.0</p>
+                </div>
+                <span class="badge-pulse ml-1"></span>
+            </div>
+            <button id="menuBtn" class="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-250" style="background: var(--muted); border: 1px solid var(--border); color: var(--fg);">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="menu-panel" id="menuPanel">
+        <div class="menu-section-title">
+            <i class="fas fa-adjust"></i> Tampilan Mode
+        </div>
+        <div class="theme-toggle">
+            <button class="theme-btn active" data-mode="light" id="btnLight">
+                <i class="fas fa-sun"></i> Putih
+            </button>
+            <button class="theme-btn" data-mode="dark" id="btnDark">
+                <i class="fas fa-moon"></i> Gelap
+            </button>
+        </div>
+
+        <div class="menu-section-title">
+            <i class="fas fa-palette"></i> Warna Text
+        </div>
+        <div class="color-grid" id="colorGrid"></div>
+
+        <div class="menu-section-title">
+            <i class="fas fa-user-astronaut"></i> Developer Links
+        </div>
+        <div class="dev-links">
+            <a href="https://chat.whatsapp.com/C5O7laRDo8p9PqwRRnFdXN" target="_blank" class="dev-card">
+                <div class="dev-icon" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="dev-content">
+                    <span class="dev-label">Grup WhatsApp</span>
+                    <span class="dev-name">Join Community</span>
+                </div>
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb67uVQJENxzkhDbl52r" target="_blank" class="dev-card">
+                <div class="dev-icon" style="background: linear-gradient(135deg, #25D366, #075E54);">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="dev-content">
+                    <span class="dev-label">Saluran WhatsApp</span>
+                    <span class="dev-name">Channel Update</span>
+                </div>
+            </a>
+            <a href="https://www.youtube.com/@Ken_botz_pemula" target="_blank" class="dev-card">
+                <div class="dev-icon" style="background: linear-gradient(135deg, #FF0000, #CC0000);">
+                    <i class="fab fa-youtube"></i>
+                </div>
+                <div class="dev-content">
+                    <span class="dev-label">YouTube</span>
+                    <span class="dev-name">Ken Botz Pemula</span>
+                </div>
+            </a>
+            <a href="https://www.instagram.com/coding_bot381" target="_blank" class="dev-card">
+                <div class="dev-icon" style="background: linear-gradient(135deg, #E1306C, #833AB4, #F77737);">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div class="dev-content">
+                    <span class="dev-label">Instagram</span>
+                    <span class="dev-name">@coding_bot381</span>
+                </div>
+            </a>
+            <a href="https://wa.me/6285758459672" target="_blank" class="dev-card">
+                <div class="dev-icon" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="dev-content">
+                    <span class="dev-label">Contact Me</span>
+                    <span class="dev-name">+62 857-5845-9672</span>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <main class="max-w-2xl mx-auto px-6 py-10 relative z-10">
+
+        <div class="relative mb-8">
+            <div class="hero-glow" style="top: -100px; right: -100px;"></div>
+            <div class="inline-flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-widest px-3 py-1.5 rounded-full mb-4" style="background: var(--accent-soft); color: var(--accent);">
+                <i class="fas fa-terminal"></i> Welcome, Developer
+            </div>
+            <h1 class="text-3xl font-black leading-tight mb-3" style="color: var(--fg);">
+                Selamat datang di <span class="gradient-text">Chisa APIs</span>
+            </h1>
+            <p class="text-sm leading-relaxed" style="color: var(--muted-fg);">
+                Koleksi endpoint API modern, script, dan tools — dikurasi dengan ❤️ oleh <span class="font-bold" style="color: var(--accent);">Kenz Coding</span>.
+                Temukan yang kamu butuhkan atau jelajahi hal baru.
+            </p>
+        </div>
+
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-base font-extrabold flex items-center gap-2" style="color: var(--fg);">
+                    <span class="material-icons text-xl" style="color: var(--accent);">notifications_active</span>
+                    Informasi Terbaru
+                </h2>
+                <span id="unread-count" class="text-[10px] font-bold px-2.5 py-1 rounded-full hidden" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #fff;"></span>
+            </div>
+            <div id="notifications-list" class="space-y-2"></div>
+        </div>
+
+        <div class="mb-4">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <span class="material-icons text-lg" style="color: var(--muted-fg);">search</span>
+                </div>
+                <input type="text" id="searchInput" placeholder="Cari endpoint, kategori, atau deskripsi..." class="w-full pl-12 pr-5 py-4 text-sm rounded-xl focus:outline-none transition-all duration-250" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);">
+            </div>
+        </div>
+
+        <div id="content" class="space-y-4">
+            <div id="noResults" class="text-center py-16" style="display: none;">
+                <div class="max-w-md mx-auto">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: var(--muted);">
+                        <i class="fas fa-search text-2xl" style="color: var(--muted-fg);"></i>
+                    </div>
+                    <h3 class="text-sm font-bold mb-1" style="color: var(--fg);">Tidak ada hasil ditemukan</h3>
+                    <p class="text-xs" style="color: var(--muted-fg);">Coba kata kunci lain atau periksa ejaan.</p>
+                </div>
+            </div>
+
+            <div id="apiList" class="space-y-3"></div>
+        </div>
+
+        <div class="flex flex-col mt-10 text-center space-y-2">
+            <div class="inline-flex items-center justify-center gap-2 mb-2">
+                <div class="w-6 h-6 rounded-md flex items-center justify-center" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                    <i class="fas fa-bolt text-white text-[8px]"></i>
+                </div>
+                <span class="text-xs font-extrabold gradient-text">Chisa APIs</span>
+            </div>
+            <p class="text-xs" style="color: var(--muted-fg);">© 2026 Chisa APIs — All Rights Reserved.</p>
+            <p class="text-xs" style="color: var(--muted-fg);">Crafted with <span style="color: #ef4444;">❤</span> by <span class="font-bold" style="color: var(--accent);">Kenz Coding</span></p>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const menuBtn = document.getElementById('menuBtn');
+            const menuPanel = document.getElementById('menuPanel');
+
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuPanel.classList.toggle('open');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!menuPanel.contains(e.target) && !menuBtn.contains(e.target)) {
+                    menuPanel.classList.remove('open');
+                }
+            });
+
+            const btnLight = document.getElementById('btnLight');
+            const btnDark = document.getElementById('btnDark');
+
+            function setTheme(mode) {
+                if (mode === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    btnDark.classList.add('active');
+                    btnLight.classList.remove('active');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    btnLight.classList.add('active');
+                    btnDark.classList.remove('active');
+                }
+            }
+
+            btnLight.addEventListener('click', () => setTheme('light'));
+            btnDark.addEventListener('click', () => setTheme('dark'));
+
+            const colors = [
+                '#6366f1', '#8b5cf6', '#06b6d4', '#ec4899', '#f59e0b',
+                '#10b981', '#ef4444', '#3b82f6', '#a855f7', '#14b8a6'
+            ];
+
+            const colorGrid = document.getElementById('colorGrid');
+
+            colors.forEach((color, i) => {
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = color;
+                swatch.style.color = color;
+                if (i === 0) swatch.classList.add('active');
+                swatch.addEventListener('click', () => {
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+                    swatch.classList.add('active');
+                    document.documentElement.style.setProperty('--accent', color);
+                    document.documentElement.style.setProperty('--accent-soft', color + '20');
+                });
+                colorGrid.appendChild(swatch);
+            });
+
+            async function copyToClipboard(text, buttonElement) {
+                if (!buttonElement) return;
+                const originalHTML = buttonElement.innerHTML;
+                try {
+                    await navigator.clipboard.writeText(text);
+                    buttonElement.textContent = 'Copied!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalHTML;
+                    }, 1500);
+                } catch (e) {
+                    console.error('Copy failed', e);
+                    buttonElement.textContent = 'Failed!';
+                    setTimeout(() => {
+                        buttonElement.innerHTML = originalHTML;
+                    }, 1500);
+                }
+            }
+
+            window.copyToClipboard = copyToClipboard;
+
+            function hlJSON(el) {
+                if (window.hljs) {
+                    hljs.highlightElement(el);
+                }
+            }
+
+            function toggleCategory(index) {
+                const category = document.getElementById(`category-${index}`);
+                const icon = document.getElementById(`category-icon-${index}`);
+                const isHidden = category.classList.toggle('hidden');
+                icon.textContent = isHidden ? 'expand_more' : 'expand_less';
+            }
+
+            function toggleEndpoint(catIndex, endpointIndex) {
+                const endpoint = document.getElementById(`endpoint-${catIndex}-${endpointIndex}`);
+                const icon = document.getElementById(`endpoint-icon-${catIndex}-${endpointIndex}`);
+                const isHidden = endpoint.classList.toggle('hidden');
+                icon.textContent = isHidden ? 'expand_more' : 'expand_less';
+            }
+
+            window.toggleCategory = toggleCategory;
+            window.toggleEndpoint = toggleEndpoint;
+
+            async function executeRequest(event, catIndex, endpointIndex, method, path) {
+                event.preventDefault();
+                const form = document.getElementById(`form-${catIndex}-${endpointIndex}`);
+                const responseDiv = document.getElementById(`response-${catIndex}-${endpointIndex}`);
+                const responseContent = document.getElementById(`response-content-${catIndex}-${endpointIndex}`);
+                const clearButton = document.getElementById(`clear-${catIndex}-${endpointIndex}`);
+
+                responseDiv.classList.remove('hidden');
+
+                const formData = new FormData(form);
+                const fetchOptions = {
+                    method: method.toUpperCase()
+                };
+
+                let fullPath = path;
+                let curlCommand = `curl -X ${fetchOptions.method} "${window.location.origin}${path}"`;
+
+                if (fetchOptions.method === 'POST' || fetchOptions.method === 'PUT' || fetchOptions.method === 'PATCH') {
+                    fetchOptions.body = formData;
+                    for (const [key, value] of formData.entries()) {
+                        if (value instanceof File && value.name) {
+                            curlCommand += ` -F "${key}=@${value.name}"`;
+                        } else if (typeof value === 'string') {
+                            curlCommand += ` -F "${key}=${value}"`;
+                        }
+                    }
+                } else {
+                    const params = new URLSearchParams();
+                    for (const [key, value] of formData.entries()) {
+                        if (typeof value === 'string' && value) {
+                            params.append(key, value);
+                        }
+                    }
+                    const queryString = params.toString();
+                    if (queryString) {
+                        fullPath += (path.includes('?') ? '&' : '?') + queryString;
+                    }
+                    curlCommand = `curl -X ${fetchOptions.method} "${window.location.origin}${fullPath}"`;
+                }
+
+                const escapedFullPath = fullPath.replace(/"/g, '&quot;').replace(/'/g, "'");
+                const escapedCurlCommand = curlCommand.replace(/"/g, '&quot;').replace(/'/g, "'");
+
+                responseContent.innerHTML = `
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="block-title">
+                                <span><span class="material-icons text-sm mr-2 align-middle">link</span>REQUEST URL</span>
+                                <button onclick="copyToClipboard('${window.location.origin}${escapedFullPath}', this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
+                            </h4>
+                            <pre class="bg-gray-900 text-white p-2 text-xs overflow-auto rounded"><code>${window.location.origin}${fullPath}</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="block-title">
+                                <span><span class="material-icons text-sm mr-2 align-middle">terminal</span>CURL COMMAND</span>
+                                <button onclick="copyToClipboard(this.parentElement.nextElementSibling.innerText, this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
+                            </h4>
+                            <pre class="bg-gray-900 text-white p-2 text-xs overflow-auto rounded"><code>${curlCommand}</code></pre>
+                        </div>
+                        <div>
+                            <h4 class="block-title">
+                                 <span><span class="material-icons text-sm mr-2 align-middle">storage</span>SERVER RESPONSE</span>
+                                 <button onclick="copyToClipboard(document.getElementById('response-body-${catIndex}-${endpointIndex}').innerText, this)" class="copy-btn"><span class="material-icons text-base align-middle">content_copy</span></button>
+                            </h4>
+                            <div id="response-body-${catIndex}-${endpointIndex}" class="bg-gray-900 text-white p-2 text-xs rounded">
+                                Loading...
+                            </div>
+                        </div>
+                    </div>
+                  `;
+
+                const responseBodyDiv = document.getElementById(`response-body-${catIndex}-${endpointIndex}`);
+
+                try {
+                    const response = await fetch(fullPath, fetchOptions);
+                    const contentType = response.headers.get('content-type') || '';
+
+                    let responseBodyContent = '';
+                    if (!response.ok) {
+                        const errText = await response.text().catch(() => '');
+                        throw new Error(`${response.status} ${response.statusText}\n${errText}`);
+                    }
+
+                    if (contentType.includes('application/json')) {
+                        const data = await response.json();
+                        responseBodyContent = `<pre class="max-h-80 overflow-auto"><code class="language-json">${JSON.stringify(data, null, 2)}</code></pre>`;
+                        setTimeout(() => hlJSON(responseBodyDiv.querySelector('code')), 0);
+                    } else if (contentType.startsWith('image/')) {
+                        const blob = await response.blob();
+                        const imageUrl = URL.createObjectURL(blob);
+                        responseBodyContent = `<img src="${imageUrl}" class="max-w-full h-auto rounded-md">`;
+                    } else {
+                        const text = await response.text();
+                        responseBodyContent = `<pre class="max-h-80 overflow-auto">${text}</pre>`;
+                    }
+                    responseBodyDiv.innerHTML = responseBodyContent;
+
+                } catch (err) {
+                    let errMessage = String(err);
+                    if (err.message && err.message.startsWith('404')) {
+                        errMessage = `Error 404: Not Found.\n\nEndpoint tidak ditemukan. Pastikan URL dan parameter sudah benar. Jika Anda yakin ini adalah kesalahan, silakan hubungi owner.`;
+                    }
+                    responseBodyDiv.innerHTML = `<pre class="text-red-400 max-h-80 overflow-auto">${errMessage}</pre>`;
+                }
+                clearButton.classList.remove('hidden');
+            }
+
+            window.executeRequest = executeRequest;
+
+            function clearResponse(catIndex, endpointIndex) {
+                const responseDiv = document.getElementById(`response-${catIndex}-${endpointIndex}`);
+                const responseContent = document.getElementById(`response-content-${catIndex}-${endpointIndex}`);
+                const clearButton = document.getElementById(`clear-${catIndex}-${endpointIndex}`);
+
+                responseDiv.classList.add('fade-out');
+                clearButton.classList.add('hidden');
+
+                setTimeout(() => {
+                    responseContent.innerHTML = '';
+                    responseDiv.classList.add('hidden');
+                    responseDiv.classList.remove('fade-out');
+                }, 200);
+            }
+
+            window.clearResponse = clearResponse;
+
+            async function loadApis() {
+                const apiList = document.getElementById('apiList');
+                try {
+                    const response = await fetch('/src/openapi.json');
+                    const data = await response.json();
+
+                    const categories = {};
+                    if (data.tags) {
+                        data.tags.forEach(tag => {
+                            categories[tag.name] = {
+                                name: tag.name,
+                                items: []
+                            };
+                        });
+                    }
+
+                    Object.keys(data.paths).forEach(path => {
+                        const pathItem = data.paths[path];
+                        Object.keys(pathItem).forEach(method => {
+                            const endpoint = pathItem[method];
+                            const tagName = endpoint.tags && endpoint.tags.length > 0 ? endpoint.tags[0] : 'Uncategorized';
+
+                            if (!categories[tagName]) {
+                                categories[tagName] = {
+                                    name: tagName,
+                                    items: []
+                                };
+                            }
+
+                            categories[tagName].items.push({
+                                path: path,
+                                method: method.toUpperCase(),
+                                name: endpoint.summary || 'No summary',
+                                desc: endpoint.description || 'No description',
+                                status: endpoint.deprecated ? 'deprecated' : 'ready',
+                                parameters: endpoint.parameters,
+                                requestBody: endpoint.requestBody
+                            });
+                        });
+                    });
+
+                    let html = '';
+                    Object.values(categories).forEach((category, catIndex) => {
+                        if (category.items.length === 0) return;
+
+                        html += `
+                        <div class="category-group" data-category="${category.name}">
+                            <div class="mb-2">
+                                <div class="rounded-xl overflow-hidden transition-all duration-250" style="background: var(--card); border: 1px solid var(--border);">
+                                    <button onclick="toggleCategory(${catIndex})" class="w-full px-4 py-3.5 text-left flex items-center justify-between transition-colors duration-150">
+                                        <h2 class="font-extrabold flex items-center">
+                                            <span class="material-icons text-xl mr-3 text-white py-1 px-2 rounded-lg" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">folder</span>
+                                            <span class="truncate max-w-xs text-sm" style="color: var(--fg);">${category.name}</span>
+                                            <span class="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full" style="background: var(--accent-soft); color: var(--accent);">${category.items.length}</span>
+                                        </h2>
+                                        <span class="material-icons transition-transform duration-150" id="category-icon-${catIndex}" style="color: var(--muted-fg);">expand_more</span>
+                                    </button>
+
+                                    <div id="category-${catIndex}" class="hidden">`;
+
+                        category.items.forEach((item, endpointIndex) => {
+                            const method = item.method;
+                            const path = item.path;
+
+                            const statusClasses = {
+                                'ready': 'background: rgba(34, 197, 94, 0.15); color: #22c55e;',
+                                'deprecated': 'background: rgba(234, 179, 8, 0.15); color: #eab308;',
+                            };
+                            const statusStyle = statusClasses[item.status] || 'background: var(--muted); color: var(--muted-fg);';
+
+                            const methodColors = {
+                                'GET': 'linear-gradient(135deg, #10b981, #059669)',
+                                'POST': 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                                'PUT': 'linear-gradient(135deg, #f59e0b, #d97706)',
+                                'DELETE': 'linear-gradient(135deg, #ef4444, #dc2626)',
+                                'PATCH': 'linear-gradient(135deg, #06b6d4, #0891b2)'
+                            };
+                            const methodBg = methodColors[method] || 'linear-gradient(135deg, #6b7280, #4b5563)';
+
+                            html += `
+                                        <div id="${item.path.split('/').pop()}" class="api-item border-t" style="border-color: var(--border);"
+                                             data-method="${method}"
+                                             data-path="${path}"
+                                             data-alias="${item.name}"
+                                             data-description="${item.desc}"
+                                             data-category="${category.name}">
+                                            <button onclick="toggleEndpoint(${catIndex}, ${endpointIndex})" class="w-full px-4 py-3 text-left flex items-center justify-between transition-colors duration-150">
+                                                <div class="flex items-center min-w-0 flex-1">
+                                                    <span class="inline-block px-2.5 py-1 text-[10px] font-extrabold text-white mr-3 flex-shrink-0 rounded-md" style="background: ${methodBg};">
+                                                        ${method}
+                                                    </span>
+                                                    <div class="flex flex-col min-w-0 flex-1">
+                                                        <span class="font-bold truncate max-w-[90%] font-mono text-xs" style="color: var(--fg);" title="${path}">${path}</span>
+                                                        <div class="flex items-center mt-0.5">
+                                                            <span class="text-[11px] truncate max-w-[90%]" style="color: var(--muted-fg);" title="${item.name}">${item.name}</span>
+                                                            <span class="ml-2 px-2 py-0.5 text-[10px] font-bold rounded-md" style="${statusStyle}">${item.status}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <span class="material-icons transition-transform duration-150 flex-shrink-0" id="endpoint-icon-${catIndex}-${endpointIndex}" style="color: var(--muted-fg);">expand_more</span>
+                                            </button>
+
+                                            <div id="endpoint-${catIndex}-${endpointIndex}" class="hidden p-4 border-t space-y-4" style="background: var(--muted); border-color: var(--border);">
+                                                <div class="mb-3">
+                                                    <div class="text-xs leading-relaxed" style="color: var(--muted-fg);">${item.desc}</div>
+                                                </div>
+                                                `;
+                            if (item.status !== 'deprecated') {
+                                html += `
+                                                    <div>
+                                                        <div class="font-extrabold text-xs mb-2 flex items-center gap-1" style="color: var(--fg);">
+                                                            <span class="material-icons text-sm">play_arrow</span>
+                                                            TRY IT OUT
+                                                        </div>
+                                                        <div>
+                                                            <form id="form-${catIndex}-${endpointIndex}" onsubmit="executeRequest(event, ${catIndex}, ${endpointIndex}, '${method}', '${path}')">
+                                                                <div class="mb-4 space-y-3">`;
+                                if (item.parameters) {
+                                    item.parameters.forEach(param => {
+                                        const schema = param.schema || {};
+                                        const isReq = !!param.required;
+                                        const label = `${param.name} ${isReq ? '<span class="text-red-500">*</span>' : ''}`;
+                                        const desc = param.description ? `<div class="text-[10px] mt-1" style="color: var(--muted-fg);">${param.description}</div>` : '';
+                                        const placeholder = (schema.example ?? schema.default ?? '') + '';
+
+                                        if (Array.isArray(schema.enum) && schema.enum.length) {
+                                            html += `
+                                                <div>
+                                                  <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
+                                                  <select name="${param.name}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isReq ? 'required' : ''}>
+                                                    ${schema.enum.map(v => `<option value="${String(v)}">${String(v)}</option>`).join('')}
+                                                  </select>
+                                                  ${desc}
+                                                </div>`;
+                                        } else {
+                                            let type = 'text';
+                                            if (schema.type === 'number' || schema.type === 'integer') type = 'number';
+                                            if (schema.type === 'boolean') {
+                                                html += `
+                                                  <div>
+                                                    <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
+                                                    <select name="${param.name}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isReq ? 'required' : ''}>
+                                                      <option value="true">true</option>
+                                                      <option value="false">false</option>
+                                                    </select>
+                                                    ${desc}
+                                                  </div>`;
+                                            } else {
+                                                html += `
+                                                  <div>
+                                                    <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
+                                                    <input type="${type}" name="${param.name}"
+                                                      class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all"
+                                                      style="background: var(--card); border: 1px solid var(--border); color: var(--fg);"
+                                                      placeholder="${placeholder.replace(/"/g,'&quot;')}" ${isReq ? 'required' : ''}>
+                                                    ${desc}
+                                                  </div>`;
+                                            }
+                                        }
+                                    });
+                                }
+
+                                if (item.requestBody && item.requestBody.content) {
+                                    const content = item.requestBody.content;
+
+                                    if (content['multipart/form-data']) {
+                                        const schema = content['multipart/form-data'].schema || {
+                                            properties: {}
+                                        };
+                                        const required = schema.required || [];
+                                        Object.keys(schema.properties || {}).forEach(propName => {
+                                            const prop = schema.properties[propName] || {};
+                                            const isRequired = required.includes(propName);
+                                            const label = `${propName} ${isRequired ? '<span class="text-red-500">*</span>' : ''}`;
+                                            const desc = prop.description ? `<div class="text-[10px] mt-1" style="color: var(--muted-fg);">${prop.description}</div>` : '';
+                                            const placeholder = (prop.example ?? prop.default ?? '') + '';
+                                            const isFile = prop.format === 'binary';
+
+                                            if (isFile) {
+                                                let accept = '';
+                                                const propDesc = (prop.description || '').toLowerCase();
+                                                if (propName.toLowerCase().includes('image') || propDesc.includes('gambar')) {
+                                                    accept = 'accept="image/*"';
+                                                } else if (propName.toLowerCase().includes('video') || propDesc.includes('vidio')) {
+                                                    accept = 'accept="video/*"';
+                                                }
+                                                html += `
+                                                    <div>
+                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
+                                                        <input type="file" name="${propName}" ${accept}
+                                                            class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all"
+                                                            style="background: var(--card); border: 1px solid var(--border); color: var(--fg);"
+                                                            ${isRequired ? 'required' : ''}>
+                                                        ${desc}
+                                                    </div>`;
+                                            } else if (Array.isArray(prop.enum) && prop.enum.length) {
+                                                html += `
+                                                    <div>
+                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
+                                                        <select name="${propName}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isRequired ? 'required' : ''}>
+                                                            ${prop.enum.map(v => `<option value="${String(v)}">${String(v)}</option>`).join('')}
+                                                        </select>
+                                                        ${desc}
+                                                    </div>`;
+                                            } else if (prop.type === 'boolean') {
+                                                html += `
+                                                    <div>
+                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
+                                                        <select name="${propName}" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" ${isRequired ? 'required' : ''}>
+                                                            <option value="true">true</option>
+                                                            <option value="false">false</option>
+                                                        </select>
+                                                        ${desc}
+                                                    </div>`;
+                                            } else {
+                                                let inputType = 'text';
+                                                if (prop.type === 'number' || prop.type === 'integer') {
+                                                    inputType = 'number';
+                                                }
+                                                html += `
+                                                    <div>
+                                                        <label class="block text-xs font-bold mb-2" style="color: var(--fg);">${label}</label>
+                                                        <input type="${inputType}" name="${propName}"
+                                                            class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all"
+                                                            style="background: var(--card); border: 1px solid var(--border); color: var(--fg);"
+                                                            placeholder="${placeholder.replace(/"/g, '&quot;')}" ${isRequired ? 'required' : ''}>
+                                                        ${desc}
+                                                    </div>`;
+                                            }
+                                        });
+                                    }
+
+                                    if (content['application/json']) {
+                                        html += `
+                                              <div>
+                                                <label class="block text-xs font-bold mb-2" style="color: var(--fg);">Body (application/json)</label>
+                                                <textarea name="__raw_json__" rows="6" class="w-full px-3 py-2.5 text-sm rounded-lg focus:outline-none transition-all font-mono" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);" placeholder='{"key":"value"}'></textarea>
+                                                <div class="text-[10px] mt-1" style="color: var(--muted-fg);">Masukkan JSON valid. Jika diisi, body lain akan diabaikan.</div>
+                                              </div>`;
+                                    }
+                                }
+
+                                html += `
+                                                                </div>
+                                                                <button type="submit" class="btn-gradient text-white px-6 py-2.5 text-xs font-extrabold rounded-lg">
+                                                                    <i class="fas fa-play mr-1"></i> Execute
+                                                                </button>
+                                                                <button type="button" id="clear-${catIndex}-${endpointIndex}" onclick="clearResponse(${catIndex}, ${endpointIndex})" class="hidden px-6 py-2.5 text-xs font-bold rounded-lg ml-2 transition-all" style="background: var(--card); border: 1px solid var(--border); color: var(--fg);">
+                                                                    Clear
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>`;
+                            } else {
+                                html += `<div class="text-xs p-3 rounded-lg" style="background: rgba(234, 179, 8, 0.15); color: #eab308; border: 1px solid rgba(234, 179, 8, 0.3);">Endpoint ini sudah tidak digunakan lagi.</div>`;
+                            }
+
+                            html += `
+                                                <div id="response-${catIndex}-${endpointIndex}" class="hidden mt-4">
+                                                    <div class="font-extrabold text-xs mb-2 flex items-center gap-1" style="color: var(--fg);">
+                                                        <span class="material-icons text-sm">code</span>
+                                                        RESPONSE
+                                                    </div>
+                                                    <div id="response-content-${catIndex}-${endpointIndex}" class="text-xs p-4 rounded-lg" style="background: var(--card); border: 1px solid var(--border);">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                        });
+                        html += `</div></div></div>`;
+                    });
+                    apiList.innerHTML = html;
+                    const categoriess = apiList.querySelectorAll('.category-group');
+                    categoriess.forEach((category, index) => {
+                        category.classList.add('will-fade-in', 'fade-in');
+                        category.style.animationDelay = `${index * 70}ms`;
+                    });
+                } catch (error) {
+                    apiList.innerHTML = '<p class="text-red-500 text-sm">Gagal memuat data API.</p>';
+                    console.error('Error loading API data:', error);
+                }
+            }
+
+            async function loadNotifications() {
+                const notificationsList = document.getElementById('notifications-list');
+                const unreadCountBadge = document.getElementById('unread-count');
+
+                try {
+                    const response = await fetch(`/src/notifications.json?t=${Date.now()}`);
+                    let notifications = await response.json();
+
+                    if (!Array.isArray(notifications)) {
+                        notifications = notifications ? [notifications] : [];
+                    }
+
+                    notificationsList.innerHTML = '';
+                    let unreadCount = 0;
+
+                    notifications.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+
+                    notifications.forEach((notif, index) => {
+                        if (!notif.read) unreadCount++;
+
+                        const notifElement = document.createElement('div');
+                        notifElement.className = `p-4 text-xs rounded-xl will-fade-in fade-in transition-all ${notif.read ? 'opacity-60' : ''}`;
+                        notifElement.style.background = 'var(--card)';
+                        notifElement.style.border = '1px solid var(--border)';
+                        notifElement.style.animationDelay = `${index * 50}ms`;
+                        notifElement.innerHTML = `
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <p class="font-extrabold mb-1" style="color: var(--fg);">${notif.title || 'Tanpa Judul'}</p>
+                                    <p class="leading-relaxed" style="color: var(--muted-fg);">${notif.message || '-'}</p>
+                                </div>
+                                <div class="flex items-center ml-4 flex-shrink-0">
+                                    ${!notif.read ? '<div class="w-2 h-2 bg-green-400 rounded-full mr-2" title="Unread"></div>' : ''}
+                                    <span style="color: var(--muted-fg);">${notif.date ? new Date(notif.date).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'}</span>
+                                </div>
+                            </div>
+                        `;
+                        notificationsList.appendChild(notifElement);
+                    });
+
+                    if (unreadCount > 0) {
+                        unreadCountBadge.textContent = unreadCount;
+                        unreadCountBadge.classList.remove('hidden');
+                    } else {
+                        unreadCountBadge.classList.add('hidden');
+                    }
+
+                    if (notifications.length === 0) {
+                        notificationsList.innerHTML = '<p class="text-center text-xs py-4" style="color: var(--muted-fg);">Tidak ada notifikasi</p>';
+                    }
+
+                } catch (error) {
+                    console.error('Gagal memuat notifikasi:', error);
+                    notificationsList.innerHTML = '<p class="text-center text-red-500 text-xs py-4">Gagal memuat notifikasi</p>';
+                    unreadCountBadge.classList.add('hidden');
+                }
+            }
+
+            document.getElementById('searchInput').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const apiItems = document.querySelectorAll('.api-item');
+                const categories = document.querySelectorAll('.category-group');
+                const noResults = document.getElementById('noResults');
+                let visibleCount = 0;
+
+                apiItems.forEach(item => {
+                    const path = item.dataset.path.toLowerCase();
+                    const alias = item.dataset.alias.toLowerCase();
+                    const description = item.dataset.description.toLowerCase();
+
+                    if (path.includes(searchTerm) || alias.includes(searchTerm) || description.includes(searchTerm)) {
+                        item.style.display = '';
+                        visibleCount++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                categories.forEach(category => {
+                    const visibleItems = category.querySelectorAll('.api-item[style=""]');
+                    if (visibleItems.length > 0) {
+                        category.style.display = '';
+                    } else {
+                        category.style.display = 'none';
+                    }
+                });
+
+                if (visibleCount === 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            });
+
+            loadApis();
+            loadNotifications();
+
+        });
+    </script>
+</body>
+</html>
