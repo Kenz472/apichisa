@@ -62,22 +62,12 @@ module.exports = function(app) {
 
             if (!validImages.length) throw new Error("Tidak ada wallpaper valid");
 
-            const randomImage = validImages[Math.floor(Math.random() * validImages.length)];
-
-            const imageRes = await fetch(randomImage.img);
-            if (!imageRes.ok) throw new Error(`Gagal fetch gambar: ${imageRes.status}`);
-
-            const arrayBuffer = await imageRes.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-
-            const contentType = imageRes.headers.get("content-type") || "image/jpeg";
-
-            res.writeHead(200, {
-                "Content-Type": contentType,
-                "Content-Length": buffer.length,
-                "Cache-Control": "no-cache, no-store, must-revalidate"
+            res.status(200).json({
+                status: true,
+                keyword: keyword,
+                total: validImages.length,
+                result: validImages
             });
-            res.end(buffer);
 
         } catch (error) {
             res.status(500).json({
