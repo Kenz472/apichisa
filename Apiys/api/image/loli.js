@@ -4,22 +4,16 @@ module.exports = function(app) {
 
     async function loliArchive() {
         try {
-            // Ambil daftar URL dari GitHub
-            const { data } = await axios.get(
-                "https://raw.githubusercontent.com/synshin9/loli-r-img/refs/heads/main/links.json"
-            );
+            let res = await fetch("https://nekos.best/api/v2/search?query=loli&type=1");
+            let mwdia = await res.json();
+            let imageUrl = mwdia.results[0].url;
 
-            if (!data || !Array.isArray(data) || data.length === 0) {
-                throw new Error("No images found");
-            }
+            // Ambil gambar sebagai ArrayBuffer
+            let imageRes = await fetch(imageUrl);
+            let arrayBuffer = await imageRes.arrayBuffer();
+            let buffer = Buffer.from(arrayBuffer);
 
-            // Pilih random URL
-            const randomUrl = data[Math.floor(Math.random() * data.length)];
-
-            // Ambil gambar sebagai buffer
-            const response = await axios.get(randomUrl, { responseType: "arraybuffer" });
-            return Buffer.from(response.data);
-
+            return buffer;
         } catch (error) {
             throw error;
         }
