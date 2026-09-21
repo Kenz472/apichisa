@@ -1,38 +1,45 @@
-const axios = require("axios");
+const axios = require('axios');
+const zlib = require('zlib')
 
-async function wakata(url) {
-  try {
-    const res = await axios.get(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Mobile/15E148 Safari/604.1",
-      },
+async function capcut(url) {
+    const headers = {
+        'Host': '3bic.com',
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Origin': 'https://3bic.com',
+        'Referer': 'https://3bic.com/',
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36'
+    };
+
+    const payload = { url };
+
+    const res = await axios.post('https://3bic.com/api/download', payload, {
+        headers,
+        responseType: 'arraybuffer',
+        decompress: false
     });
 
-    const html = res.data;
-    const match = html.match(/"structuredData":({.*?}),"bizCode"/);
-    if (!match) throw new Error("structuredData not found");
+    let data = res.data;
+    const encoding = res.headers['content-encoding'];
 
-    const jsonText = match[1];
-    const data = JSON.parse(jsonText);
+    if (encoding === 'br') {
+        data = zlib.brotliDecompressSync(data);
+    } else if (encoding === 'gzip') {
+        data = zlib.gunzipSync(data);
+    } else if (encoding === 'deflate') {
+        data = zlib.inflateSync(data);
+    }
 
-    const decodeUrl = (str) =>
-      str?.replace(/\\u002F/g, "/").replace(/^https:\\/, "https://");
+    const json = JSON.parse(data.toString());
 
-    return {
-      title: data.name || "",
-      description: data.description || "",
-      thumbnail: decodeUrl(data.thumbnailUrl || ""),
-      video: decodeUrl(data.contentUrl || ""),
-      author: data.creator?.name || "",
-      avatar: decodeUrl(data.creator?.avatarUrl || ""),
-      duration: data.duration || 0,
-      likes: data.interactionStatistic?.likeCount || 0,
-      uses: data.interactionStatistic?.useCount || 0,
-    };
-  } catch (e) {
-    throw new Error(e.message);
-  }
+    if (json.originalVideoUrl && json.originalVideoUrl.startsWith('/')) {
+        json.originalVideoUrl = 'https://3bic.com' + json.originalVideoUrl;
+    }
+    if (json.originalAudioUrl && json.originalAudioUrl.startsWith('/')) {
+        json.originalAudioUrl = 'https://3bic.com' + json.originalAudioUrl;
+    }
+
+    return json;
 }
 
 module.exports = function(app) {
@@ -43,7 +50,7 @@ module.exports = function(app) {
       return res.status(400).json({ status: false, error: "Url is required" });
 
     try {
-      const result = await wakata(url);
+      const result = await capcut(url);
       res.status(200).json({ status: true, result });
     } catch (e) {
       res.status(500).json({ status: false, error: e.message });
